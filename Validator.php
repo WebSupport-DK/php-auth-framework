@@ -1,7 +1,7 @@
 <?php
 
-namespace thom855j\PHPSecurity;
-use thom855j\PHPSql\DBPdo;
+namespace thom855j\PHPAuth;
+use thom855j\PHPSql\DB;
 
 class Validator
 {
