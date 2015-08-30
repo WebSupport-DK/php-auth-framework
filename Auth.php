@@ -1,176 +1,177 @@
 <?php
 
-namespace thom855j\php-auth ;
-use thom855j\sql\DB,
-    thom855j\security\Session,
-    thom855j\security\Cookie,
-    thom855j\security\Hash,
-    thom855j\security\Password;
+namespace thom855j\PHPAuth;
+
+use thom855j\PHPSql\DB,
+    thom855j\PHPSecurity\Session,
+    thom855j\PHPSecurity\Cookie,
+    thom855j\PHPSecurity\Hash,
+    thom855j\PHPSecurity\Password;
 
 class Auth
 {
 
     // object instance
     private static
-            $_instance = null ;
+            $_instance = null;
     private
-            $_storage ,
-            $_data ,
-            $_users ,
-            $_roles ,
-            $_sessionName ,
-            $_sessions ,
-            $_cookieName ,
-            $_cookieExpiry ,
-            $_isLoggedIn ;
+            $_storage,
+            $_data,
+            $_users,
+            $_roles,
+            $_sessionName,
+            $_sessions,
+            $_cookieName,
+            $_cookieExpiry,
+            $_isLoggedIn;
 
     public
-            function __construct(DB $storage )
+            function __construct(DB $storage)
     {
         // db connection
-        $this->_storage      = $storage ;
+        $this->_storage      = $storage;
         // db tables
-        $this->_users        = 'Users' ;
-        $this->_roles        = 'Roles' ;
-        $this->_sessions     = 'Sessions' ;
+        $this->_users        = 'Users';
+        $this->_roles        = 'Roles';
+        $this->_sessions     = 'Sessions';
         // session and cookie names
-        $this->_sessionName  = 'User' ;
-        $this->_cookieName   = 'Hash' ;
+        $this->_sessionName  = 'User';
+        $this->_cookieName   = 'Hash';
         // life of cookie before exipry
-        $this->_cookieExpiry = 1800 ;
+        $this->_cookieExpiry = 1800;
 
-        if ( Session::exists( $this->_sessionName ) )
+        if (Session::exists($this->_sessionName))
         {
-            $user = Session::get( $this->_sessionName ) ;
+            $user = Session::get($this->_sessionName);
 
-            if ( $this->search( $user ) )
+            if ($this->search($user))
             {
-                $this->_isLoggedIn = true ;
+                $this->_isLoggedIn = true;
             }
             else
             {
-                $this->logout() ;
+                $this->logout();
             }
         }
     }
 
-    public static function load( $params = null )
+    /*
+     * Instantiate object
+     */
+
+    public static
+            function load($params = null)
     {
-        if ( !isset( self::$_instance ) )
+        if (!isset(self::$_instance))
         {
-            self::$_instance = new Auth( $params ) ;
+            self::$_instance = new Auth($params);
         }
-        return self::$_instance ;
+        return self::$_instance;
     }
-    
-    public function setTable( $table, $name )
+
+    public
+            function setTable($table, $name)
     {
         $this->$table = $name;
     }
 
     //Find users
-    public function search( $user = null )
+    public
+            function search($user = null)
     {
 
-        if ( $user )
+        if ($user)
         {
-            $field = (is_numeric( $user )) ? 'ID' : 'Username' ;
+            $field = (is_numeric($user)) ? 'ID' : 'Username';
 
-            $data = $this->_storage->select( array( '*' ) , $this->_users ,
-                                             array( array( $field , '=' , $user ) ) ) ;
-            if ( $data->count() )
+            $data = $this->_storage->select(array('*'), $this->_users, array(array($field, '=', $user)));
+            if ($data->count())
             {
-                $this->_data = $data->first() ;
-                return true ;
+                $this->_data = $data->first();
+                return true;
             }
         }
-        return false ;
+        return false;
     }
 
     //check if user exists
-    public function exists()
+    public
+            function exists()
     {
-        return (!empty( $this->_data )) ? true : false ;
+        return (!empty($this->_data)) ? true : false;
     }
 
     //Log users in
     public
-            function login( $username = null , $password = null ,
-                            $remember = false )
+            function login($username = null, $password = null, $remember = false)
     {
 
-        if ( !$username && !$password && $this->exists() )
+        if (!$username && !$password && $this->exists())
         {
-            Session::set( $this->_sessionName , $this->data()->ID ) ;
+            Session::set($this->_sessionName, $this->data()->ID);
         }
         else
         {
 
-            $user = $this->search( $username ) ;
-            if ( $user )
+            $user = $this->search($username);
+            if ($user)
             {
 
-                if ( Password::verify( $password , $this->data()->Password ) )
+                if (Password::verify($password, $this->data()->Password))
                 {
                     // password is correct
 
-                    Session::set( $this->_sessionName , $this->data()->ID ) ;
+                    Session::set($this->_sessionName, $this->data()->ID);
 
-                    if ( $remember )
+                    if ($remember)
                     {
-                        $hash = Hash::unique() ;
+                        $hash = Hash::unique();
 
-                        $hashCheck = $this->_storage->select( array( '*' ) ,
-                                                              $this->_sessions ,
-                                                              array( array( 'User_ID' ,
-                                '=' , $this->data()->ID ) ) ,
-                                                              array( 'LIMIT' => 1 ) ) ;
+                        $hashCheck = $this->_storage->select(array('*'), $this->_sessions, array(array('User_ID',
+                                '=', $this->data()->ID)), array('LIMIT' => 1));
 
-                        if ( !$hashCheck->count() )
+                        if (!$hashCheck->count())
                         {
-                            $this->_storage->insert( $this->_sessions ,
-                                                     array(
-                                'User_ID' => $this->data()->ID ,
+                            $this->_storage->insert($this->_sessions, array(
+                                'User_ID' => $this->data()->ID,
                                 'Hash'    => $hash
-                            ) ) ;
+                            ));
                         }
                         else
                         {
-                            $hashCheck = $hashCheck->first()->Hash ;
+                            $hashCheck = $hashCheck->first()->Hash;
                         }
 
-                        Cookie::set( $this->_cookieName , $hash ,
-                                     $this->_cookieExpiry ) ;
+                        Cookie::set($this->_cookieName, $hash, $this->_cookieExpiry);
                     }
 
-                    return true ;
+                    return true;
                 }
             }
         }
 
-        return false ;
+        return false;
     }
 
     //User roles
     public
-            function role( $key )
+            function role($key)
     {
-        if ( $this->isLoggedIn() == true )
+        if ($this->isLoggedIn() == true)
         {
-            $role = $this->_storage->select( array( '*' ) , $this->_roles ,
-                                             array( array( 'ID' , '=' , $this->data()->Role_ID ) ) ) ;
+            $role = $this->_storage->select(array('*'), $this->_roles, array(array('ID', '=', $this->data()->Role_ID)));
 
-            if ( $role->count() )
+            if ($role->count())
             {
-                $permissions = json_decode( $role->first()->Role , true ) ;
+                $permissions = json_decode($role->first()->Role, true);
 
-                if ( $permissions[ $key ] == true )
+                if ($permissions[$key] == true)
                 {
-                    return true ;
+                    return true;
                 }
             }
         }
-        return false ;
+        return false;
     }
 
     public
@@ -180,42 +181,39 @@ class Auth
          * Check for cookies on client 
          * only if no session user-session (login-session) exists
          */
-        if ( Cookie::exists( $this->_cookieName ) && !Session::exists( $this->_sessionName ) )
+        if (Cookie::exists($this->_cookieName) && !Session::exists($this->_sessionName))
         {
             // Get hashed name from cookie on client
             // and check if hashed name exists in database 'Sessions'
-            $hashCheck = $this->_storage->select( array( 'User_ID' ) ,
-                                                  $this->_sessions ,
-                                                  array( array( 'Hash' , '=' , $this->_cookieName ) ) ,
-                                                  array( 'LIMIT' => 1 ) ) ;
+            $hashCheck = $this->_storage->select(array('User_ID'), $this->_sessions, array(array('Hash', '=', $this->_cookieName)), array('LIMIT' => 1));
             // Only if the query returns results then login the client
-            if ( $hashCheck->count() )
+            if ($hashCheck->count())
             {
                 // Get the user ID from the $hashCheck query and login the client/user
-                $this->login( $hashCheck->first()->User_ID ) ;
+                $this->login($hashCheck->first()->User_ID);
             }
         }
     }
 
     public
-            function checkLogin( $url = null )
+            function checkLogin($url = null)
     {
-        if ( $this->isLoggedIn() == true )
+        if ($this->isLoggedIn() == true)
         {
-            return true ;
+            return true;
         }
         else
         {
-            Redirect::to( $url ) ;
+            Redirect::to($url);
         }
     }
 
     public
-            function checkRole( $key )
+            function checkRole($key)
     {
-        if ( $this->role( $key ) == true )
+        if ($this->role($key) == true)
         {
-            return true ;
+            return true;
         }
     }
 
@@ -223,26 +221,25 @@ class Auth
             function logout()
     {
 
-        if ( Cookie::exists( $this->_cookieName ) )
+        if (Cookie::exists($this->_cookieName))
         {
-            die( 'yes' ) ;
-            $this->_storage->delete( $this->_sessions ,
-                                     array( array( 'User_ID' , '=' , $this->data()->ID ) ) ) ;
+            die('yes');
+            $this->_storage->delete($this->_sessions, array(array('User_ID', '=', $this->data()->ID)));
         }
-        Session::delete( $this->_sessionName ) ;
-        Cookie::delete( $this->_cookieName ) ;
+        Session::delete($this->_sessionName);
+        Cookie::delete($this->_cookieName);
     }
 
     public
             function data()
     {
-        return $this->_data ;
+        return $this->_data;
     }
 
     public
             function isLoggedIn()
     {
-        return $this->_isLoggedIn ;
+        return $this->_isLoggedIn;
     }
 
 }
