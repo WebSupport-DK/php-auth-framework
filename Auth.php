@@ -1,6 +1,6 @@
 <?php
 
-namespace thom855j\PHPAuth;
+namespace thom855j\php_auth;
 
 use thom855j\PHPSql\DB,
     thom855j\PHPSecurity\Session,
