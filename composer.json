@@ -9,8 +9,7 @@
         "php": ">=5.4.0",
         "thom855j/php-security": "dev",
         "thom855j/php-sql": "dev"
-    }
-    {
+    },
     "autoload": {
         "psr-4": {
             "thom855j\\php-auth\\": "",
@@ -18,5 +17,4 @@
             "thom855j\\php-sql\\": ""
             }
         }
-    }
 }
