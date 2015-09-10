@@ -1,14 +1,14 @@
 {
     "name": "thom855j/php-auth",
+    "version": "dev-master",
     "type": "project",
     "description": "Authentication project for managing users and their permissions ",
     "keywords": ["login", "auth", "user", "authentication", "permissions"],
     "license": "MIT",
-    "minimum-stability": "dev",
     "require": {
         "php": ">=5.4.0",
-        "thom855j/php-security": "dev",
-        "thom855j/php-sql": "dev"
+        "thom855j/php-security": "*",
+        "thom855j/php-sql": "*"
     },
     "autoload": {
         "psr-4": {
