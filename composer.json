@@ -4,6 +4,7 @@
     "description": "Authentication project for managing users and their permissions ",
     "keywords": ["login", "auth", "user", "authentication", "permissions"],
     "license": "MIT",
+    "minimum-stability": "dev-master",
     "require": {
         "php": ">=5.4.0",
         "thom855j/php-security": "dev-master",
