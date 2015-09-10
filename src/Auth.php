@@ -1,12 +1,12 @@
 <?php
 
-namespace thom855j\php_auth;
+namespace thom855j\Auth;
 
-use thom855j\php_sql\DB,
-    thom855j\php_security\Session,
-    thom855j\php_security\Cookie,
-    thom855j\php_security\Hash,
-    thom855j\php_security\Password;
+use thom855j\Sql\DB,
+    thom855j\Security\Session,
+    thom855j\Security\Cookie,
+    thom855j\Security\Hash,
+    thom855j\Security\Password;
 
 class Auth
 {
