@@ -12,7 +12,7 @@
     },
     "autoload": {
         "psr-4": {
-            "thom855j\\php_auth\\": "src/Auth"
+            "thom855j\\php_auth\\": "src/"
             }
         }
 }
