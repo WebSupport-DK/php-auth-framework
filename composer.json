@@ -7,8 +7,8 @@
     "minimum-stability": "dev-master",
     "require": {
         "php": ">=5.4.0",
-        "thom855j/php-security": "dev-master",
-        "thom855j/php-sql": "dev-master"
+        "thom855j/php-security": "dev",
+        "thom855j/php-sql": "dev"
     }
     {
     "autoload": {
