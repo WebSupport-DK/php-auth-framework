@@ -1,7 +1,7 @@
 {
     "name": "thom855j/php-auth",
     "type": "project",
-    "description": "A user authentication / login system ",
+    "description": "Authentication project for managing users and their permissions ",
     "keywords": ["login", "auth", "user", "authentication", "permissions"],
     "license": "MIT",
     "require": {
