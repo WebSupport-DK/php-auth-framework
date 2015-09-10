@@ -1,13 +1,12 @@
 {
-    "name": "thom855j/PHPAuth",
+    "name": "thom855j/php-auth",
     "type": "project",
     "description": "A user authentication / login system ",
     "keywords": ["login", "auth", "user", "authentication", "permissions"],
-    "homepage": "https://github.com/thom855j/PHPAuth",
-    "license": "GNU",
+    "license": "MIT",
     "require": {
         "php": ">=5.5.0",
-        "thom855j/PHPSecurity": "1.0",
-        "thom855j/PHPSql": "1.0"
+        "thom855j/php-security": "dev-master",
+        "thom855j/php-sql": "dev-master"
     }
 }
