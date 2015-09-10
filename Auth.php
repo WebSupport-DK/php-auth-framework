@@ -2,11 +2,11 @@
 
 namespace thom855j\php_auth;
 
-use thom855j\PHPSql\DB,
-    thom855j\PHPSecurity\Session,
-    thom855j\PHPSecurity\Cookie,
-    thom855j\PHPSecurity\Hash,
-    thom855j\PHPSecurity\Password;
+use thom855j\php_sql\DB,
+    thom855j\php_security\Session,
+    thom855j\php_security\Cookie,
+    thom855j\php_security\Hash,
+    thom855j\php_security\Password;
 
 class Auth
 {
