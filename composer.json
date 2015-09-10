@@ -9,4 +9,13 @@
         "thom855j/php-security": "dev-master",
         "thom855j/php-sql": "dev-master"
     }
+    {
+    "autoload": {
+        "psr-4": {
+            "thom855j\\php-auth\\": "",
+            "thom855j\\php-security\\": "",
+            "thom855j\\php-sql\\": ""
+            }
+        }
+    }
 }
