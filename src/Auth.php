@@ -15,11 +15,12 @@ class Auth
     // object instance
     private static
             $_instance = null;
-    private
+    protected
             $db,
             $data,
             $users,
             $roles,
+            $userAttributes,
             $status,
             $token,
             $active,
@@ -29,29 +30,29 @@ class Auth
             $cookieName,
             $cookieExpiry,
             $timeout,
-            $validateEmail    = false,
             $isLoggedIn;
 
     public
             function __construct($db)
     {
         // db connection
-        $this->db           = $db;
-        $this->token        = '5XDPLPAmat';
+        $this->db             = $db;
+        $this->token          = '5XDPLPAmat';
         // db tables
-        $this->users        = 'Users';
-        $this->roles        = 'Roles';
-        $this->sessions     = 'Sessions';
-        $this->status       = 'Status';
-        // default status value
-        $this->active       = 2;
+        $this->users          = 'Users';
+        $this->roles          = 'Roles';
+        $this->sessions       = 'Sessions';
+        $this->status         = 'Status';
+        $this->userAttributes = array('ID, Username, Firstname, Lastname, Password, Email, Role_ID, Status_ID, Auth_token, Reset_token, Last_login');
+        // default values
+        $this->active         = 2;
         // session and cookie names
-        $this->sessionName  = 'User';
-        $this->sessionRole  = 'Role';
-        $this->cookieName   = 'User';
+        $this->sessionName    = 'User';
+        $this->sessionRole    = 'Role';
+        $this->cookieName     = 'User';
         // life of cookie before exipry
-        $this->cookieExpiry = 1800;
-        $this->timeout      = 1800;
+        $this->cookieExpiry   = 1800;
+        $this->timeout        = 1800;
     }
 
     /*
@@ -86,8 +87,7 @@ class Auth
             {
                 $field = 'Email';
             }
-
-            $data = $this->db->select(array('ID, Username, Password, Email, Role_ID, Status_ID, Last_login'), $this->users, array(array($field, '=', $user)));
+            $data = $this->db->select($this->userAttributes, $this->users, array(array($field, '=', $user)));
 
             if ($data->count())
             {
@@ -260,26 +260,20 @@ class Auth
     }
 
     public
-            function activateToken($user_id)
+            function authToken($user_id)
     {
-        $this->db->update($this->users, 'ID', $user_id, array(
-            'Activation_token' => Token::create(46)
-        ));
-    }
-
-    public
-            function reactivateToken($user_id)
-    {
+        $token = Token::create(46);
         $this->search($user_id);
-        $this->db->update($this->users, 'ID', $user_id, array(
-            'Reactivation_token' => Token::create(46)
+        $this->db->update($this->users, 'ID', $this->data()->ID, array(
+            'Auth_token' => $token
         ));
+        return $token;
     }
 
     public
-            function activate($key)
+            function auth($key)
     {
-        $token = $this->db->select(array('ID, Activation_token'), $this->users, array(array('Activation_token', '=', $key)));
+        $token = $this->db->select(array('ID, Auth_token'), $this->users, array(array('Auth_token', '=', $key)));
 
         if ($token->results())
         {
@@ -296,9 +290,20 @@ class Auth
     }
 
     public
-            function reactivate($key)
+            function resetToken($user_id)
     {
-        $token = $this->db->select(array('ID, Reactivation_token'), $this->users, array(array('Reactivation_Token', '=', $key)));
+        $token = Token::create(46);
+        $this->search($user_id);
+        $this->db->update($this->users, 'ID', $user_id, array(
+            'Reset_token' => $token
+        ));
+        return $token;
+    }
+
+    public
+            function reset($key)
+    {
+        $token = $this->db->select(array('ID, Reset_token'), $this->users, array(array('Reset_token', '=', $key)));
 
         if ($token->results())
         {
@@ -322,7 +327,7 @@ class Auth
         Cookie::delete($this->cookieName);
     }
 
-    private
+    protected
             function data()
     {
         return $this->data;

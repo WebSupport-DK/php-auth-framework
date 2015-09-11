@@ -17,6 +17,3 @@ Auth::load()->setAttribute('token', 'H4qRRbMkUpgvw==');
 
 // checks if user is logged in and still exist in db
 Auth::load()->check();
-
-var_dump($_SESSION);
-var_dump($_COOKIE);

@@ -17,6 +17,3 @@ Auth::load()->setAttribute('token', 'H4qRRbMkUpgvw==');
 
 // logs out the user and deletes the session if it is set
 Auth::load()->logout();
-
-var_dump($_SESSION);
-var_dump($_COOKIE);

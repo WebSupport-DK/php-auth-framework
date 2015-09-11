@@ -15,8 +15,5 @@ session_start();
 Auth::load()->setAttribute('db',  DB::load());
 Auth::load()->setAttribute('token', 'H4qRRbMkUpgvw==');
 
-// to activate an account, a token is generated in db
-Auth::load()->activateToken($user_id);
-
-var_dump($_SESSION);
-var_dump($_COOKIE);
+// if the correct token is given, the user can reset password (return true or false)
+Auth::load()->reset($key);

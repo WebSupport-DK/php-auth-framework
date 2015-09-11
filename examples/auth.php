@@ -16,7 +16,4 @@ Auth::load()->setAttribute('db',  DB::load());
 Auth::load()->setAttribute('token', 'H4qRRbMkUpgvw==');
 
 // if the correct token is given, the user status is changed to active
-Auth::load()->activate($key);
-
-var_dump($_SESSION);
-var_dump($_COOKIE);
+Auth::load()->auth($key);
