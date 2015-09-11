@@ -1,5 +1,5 @@
 {
-    "name": "thom855j/php-auth",
+    "name": "thom855j/php-auth-framework",
     "version": "dev-master",
     "type": "project",
     "description": "Authentication project for managing users and their permissions ",
@@ -12,7 +12,7 @@
     },
     "autoload": {
         "psr-4": {
-            "thom855j\\PHPAuth\\": "src/"
+            "thom855j\\PHPAuthFramework\\": "src/"
             }
         }
 }
