@@ -22,13 +22,14 @@ class Auth
             $roles,
             $status,
             $token,
+            $active,
             $sessionName,
             $sessionRole,
             $sessions,
             $cookieName,
             $cookieExpiry,
             $timeout,
-            $validateEmail = false,
+            $validateEmail    = false,
             $isLoggedIn;
 
     public
@@ -41,7 +42,9 @@ class Auth
         $this->users        = 'Users';
         $this->roles        = 'Roles';
         $this->sessions     = 'Sessions';
-        $this->status    = 'Status';
+        $this->status       = 'Status';
+        // default status value
+        $this->active       = 2;
         // session and cookie names
         $this->sessionName  = 'User';
         $this->sessionRole  = 'Role';
@@ -84,7 +87,7 @@ class Auth
                 $field = 'Email';
             }
 
-            $data = $this->db->select(array('ID, Username, Password, Email, Role_ID, Last_login'), $this->users, array(array($field, '=', $user)));
+            $data = $this->db->select(array('ID, Username, Password, Email, Role_ID, Status_ID, Last_login'), $this->users, array(array($field, '=', $user)));
 
             if ($data->count())
             {
@@ -254,6 +257,57 @@ class Auth
         }
 
         return false;
+    }
+
+    public
+            function activateToken($user_id)
+    {
+        $this->db->update($this->users, 'ID', $user_id, array(
+            'Activation_token' => Token::create(46)
+        ));
+    }
+
+    public
+            function reactivateToken($user_id)
+    {
+        $this->search($user_id);
+        $this->db->update($this->users, 'ID', $user_id, array(
+            'Reactivation_token' => Token::create(46)
+        ));
+    }
+
+    public
+            function activate($key)
+    {
+        $token = $this->db->select(array('ID, Activation_token'), $this->users, array(array('Activation_token', '=', $key)));
+
+        if ($token->results())
+        {
+            $this->search($token->first()->ID);
+            $this->db->update($this->users, 'ID', $this->data()->ID, array(
+                'Status_ID' => $this->active
+            ));
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public
+            function reactivate($key)
+    {
+        $token = $this->db->select(array('ID, Reactivation_token'), $this->users, array(array('Reactivation_Token', '=', $key)));
+
+        if ($token->results())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public

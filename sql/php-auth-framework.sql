@@ -99,8 +99,8 @@ CREATE TABLE IF NOT EXISTS `Users` (
   `Lastname` varchar(50) NOT NULL,
   `Role_ID` int(11) NOT NULL,
   `Status_ID` int(11) NOT NULL,
-  `Activation_Key` varchar(64) NOT NULL,
-  `Reactivation_Key` varchar(64) NOT NULL,
+  `Activation_token` varchar(64) NOT NULL,
+  `Reactivation_token` varchar(64) NOT NULL,
   `Last_login` int(11) DEFAULT NULL,
   `Timeout` int(11) DEFAULT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
