@@ -5,7 +5,7 @@ require_once '../vendor/autoload.php';
 
 use thom855j\PHPScrud\DB,
     thom855j\PHPAuthFramework\Auth,
-    thom855j\PHPAuthFramework\Email;
+    thom855j\PHPEmail\Email;
 
 // start db
 DB::load('mysql', 'localhost', 'php-auth-framework', 'root', '');
