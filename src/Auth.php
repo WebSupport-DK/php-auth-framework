@@ -186,6 +186,7 @@ class Auth
         Session::addKey($this->sessionName, 'ID', $this->data()->ID);
         Session::addKey($this->sessionName, 'Username', $this->data()->Username);
         Session::addKey($this->sessionName, 'Last_login', $this->data()->Last_login);
+        Session::addKey($this->sessionName, 'Timeout', time());
         $role = $this->db->select(array('ID,Role'), $this->roles, array(array('ID', '=', $this->data()->Role_ID)));
         Session::addKey($this->sessionName, 'Role', Hash::encrypt($role->first()->Role, $this->token));
         // update last login
