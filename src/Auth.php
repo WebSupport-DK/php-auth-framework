@@ -38,6 +38,7 @@ class Auth
         // db connection
         $this->db             = $db;
         $this->token          = '5XDPLPAmat';
+        $this->isLoggedIn     = false;
         // db tables
         $this->users          = 'Users';
         $this->roles          = 'Roles';
@@ -70,9 +71,9 @@ class Auth
     }
 
     public
-            function setAttribute($table, $name)
+            function setAttribute($attribute, $name)
     {
-        $this->$table = $name;
+        $this->$attribute = $name;
     }
 
     //Find users
@@ -143,27 +144,6 @@ class Auth
         return false;
     }
 
-    //User roles
-    public
-            function role($key)
-    {
-        if ($this->isLoggedIn() == true)
-        {
-            $role = Session::getKey($this->sessionName, $this->sessionRole);
-
-            if ($role)
-            {
-                $permissions = json_decode(Hash::decrypt($role, $this->token), true);
-
-                if ($permissions[$key] == true)
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
     private
             function updateTimeout()
     {
@@ -214,14 +194,20 @@ class Auth
 
                 // star the user session
                 $this->startSession();
+                $this->isLoggedIn = true;
                 return true;
+            }
+            else
+            {
+                $this->logout();
+                return false;
             }
         }
         return false;
     }
 
-    public
-            function check()
+    private
+            function checkSession()
     {
         if (Session::exists($this->sessionName))
         {
@@ -243,20 +229,34 @@ class Auth
             $this->isLoggedIn = true;
             return true;
         }
-        if (Cookie::exists($this->cookieName))
+    }
+
+    public
+            function check()
+    {
+        $this->checkSession();
+        $this->checkCookie();
+        return false;
+    }
+    
+        //User roles
+    public
+            function role($key)
+    {
+        if ($this->isLoggedIn() == true)
         {
-            if ($this->checkCookie())
+            $role = Session::getKey($this->sessionName, $this->sessionRole);
+
+            if ($role)
             {
-                $this->isLoggedIn = true;
-                return true;
-            }
-            else
-            {
-                $this->logout();
-                return false;
+                $permissions = json_decode(Hash::decrypt($role, $this->token), true);
+
+                if ($permissions[$key] == true)
+                {
+                    return true;
+                }
             }
         }
-
         return false;
     }
 
