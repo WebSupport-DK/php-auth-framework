@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Vært: localhost
--- Genereringstid: 11. 09 2015 kl. 19:49:15
+-- Genereringstid: 14. 09 2015 kl. 18:56:45
 -- Serverversion: 5.6.26
 -- PHP-version: 5.6.12
 
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `php-auth-framework`
+-- Database: `php-mvc-cmf`
 --
 
 -- --------------------------------------------------------
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `Roles` (
   `ID` int(11) NOT NULL,
   `Name` varchar(20) NOT NULL,
   `Role` varchar(255) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Data dump for tabellen `Roles`
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `Sessions` (
   `ID` int(11) NOT NULL,
   `Token` varchar(64) NOT NULL,
   `User_ID` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Data dump for tabellen `Sessions`
@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS `Status` (
   `ID` int(11) NOT NULL,
   `Name` varchar(20) NOT NULL,
   `Status` varchar(255) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Data dump for tabellen `Status`
@@ -103,67 +103,8 @@ CREATE TABLE IF NOT EXISTS `Users` (
   `Reset_token` varchar(64) NOT NULL,
   `Last_login` int(11) DEFAULT NULL,
   `Timeout` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Data dump for tabellen `Users`
---
-
-INSERT INTO `Users` (`ID`, `Created`, `Updated`, `Username`, `Email`, `Password`, `Firstname`, `Lastname`, `Role_ID`, `Status_ID`, `Activation_Key`, `Reactivation_Key`, `Last_login`, `Timeout`) VALUES
-(1, 1441975753, 0, 'demo', 'demo@email.com', '$2y$07$pLnzm4pUH5FoWjiyEnVQK.1e4j1t5XDPLPAmatemc8P.m.97c.CGm', 'Demo', 'User', 1, 1, 'qS(e-Kv?G8)eit242pG5d7nywHT*#CRxfeDtRZcjZeifsb*p]i#-5v=o3r8e4{u0', '', 1441985272, NULL);
-
---
--- Begrænsninger for dumpede tabeller
---
-
---
--- Indeks for tabel `Roles`
---
-ALTER TABLE `Roles`
-  ADD PRIMARY KEY (`ID`);
-
---
--- Indeks for tabel `Sessions`
---
-ALTER TABLE `Sessions`
-  ADD PRIMARY KEY (`ID`);
-
---
--- Indeks for tabel `Status`
---
-ALTER TABLE `Status`
-  ADD PRIMARY KEY (`ID`);
-
---
--- Indeks for tabel `Users`
---
-ALTER TABLE `Users`
-  ADD PRIMARY KEY (`ID`);
-
---
--- Brug ikke AUTO_INCREMENT for slettede tabeller
---
-
---
--- Tilføj AUTO_INCREMENT i tabel `Roles`
---
-ALTER TABLE `Roles`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
---
--- Tilføj AUTO_INCREMENT i tabel `Sessions`
---
-ALTER TABLE `Sessions`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=11;
---
--- Tilføj AUTO_INCREMENT i tabel `Status`
---
-ALTER TABLE `Status`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
---
--- Tilføj AUTO_INCREMENT i tabel `Users`
---
-ALTER TABLE `Users`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
