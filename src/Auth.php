@@ -44,7 +44,7 @@ class Auth
         $this->roles          = 'Roles';
         $this->sessions       = 'Sessions';
         $this->status         = 'Status';
-        $this->userAttributes = array('ID, Username, Firstname, Lastname, Password, Email, Role_ID, Status_ID, Auth_token, Reset_token, Last_login');
+        $this->userAttributes = array('ID, Created, Username, Firstname, Lastname, Password, Email, Role_ID, Status_ID, Auth_token, Reset_token, Last_login');
         // default values
         $this->active         = 2;
         // session and cookie names
@@ -83,12 +83,13 @@ class Auth
 
         if ($user)
         {
+
             $field = (is_numeric($user)) ? 'ID' : 'Username';
             if (filter_var($user, FILTER_VALIDATE_EMAIL))
             {
                 $field = 'Email';
             }
-            $data = $this->db->select($this->userAttributes, $this->users, array(array($field, '=', $user)));
+            $data = $this->db->select($this->userAttributes, $this->users,null, array(array($field, '=', $user)));
 
             if ($data->count())
             {
@@ -126,7 +127,7 @@ class Auth
                     {
                         $hash = Token::create(46);
 
-                        $hashCheck = $this->db->select(array('User_ID'), $this->sessions, array(array('User_ID', '=', $this->data()->ID)), array('LIMIT' => 1));
+                        $hashCheck = $this->db->select(array('User_ID'), $this->sessions,null, array(array('User_ID', '=', $this->data()->ID)), array('LIMIT' => 1));
 
                         if (!$hashCheck->count())
                         {
@@ -167,7 +168,7 @@ class Auth
         Session::addKey($this->sessionName, 'Username', $this->data()->Username);
         Session::addKey($this->sessionName, 'Last_login', $this->data()->Last_login);
         Session::addKey($this->sessionName, 'Timeout', time());
-        $role = $this->db->select(array('ID,Role'), $this->roles, array(array('ID', '=', $this->data()->Role_ID)));
+        $role = $this->db->select(array('ID,Role'), $this->roles, null,array(array('ID', '=', $this->data()->Role_ID)));
         Session::addKey($this->sessionName, 'Role', Hash::encrypt($role->first()->Role, $this->token));
         // update last login
         $this->updateLastLogin();
@@ -185,7 +186,7 @@ class Auth
         {
             // Get hashed name from cookie on client
             // and check if hashed name exists in database 'Sessions'
-            $hashCheck = $this->db->select(array('User_ID'), $this->sessions, array(array('Token', '=', Cookie::get($this->cookieName))), array('LIMIT' => 1));
+            $hashCheck = $this->db->select(array('User_ID'), $this->sessions, null,array(array('Token', '=', Cookie::get($this->cookieName))), array('LIMIT' => 1));
             // Only if the query returns results then login the client
             if ($hashCheck->count())
             {
@@ -274,7 +275,7 @@ class Auth
     public
             function auth($key)
     {
-        $token = $this->db->select(array('ID, Auth_token'), $this->users, array(array('Auth_token', '=', $key)));
+        $token = $this->db->select(array('ID, Auth_token'), $this->users,null, array(array('Auth_token', '=', $key)));
 
         if ($token->results())
         {
@@ -304,7 +305,7 @@ class Auth
     public
             function reset($key)
     {
-        $token = $this->db->select(array('ID, Reset_token'), $this->users, array(array('Reset_token', '=', $key)));
+        $token = $this->db->select(array('ID, Reset_token'), $this->users,null, array(array('Reset_token', '=', $key)));
 
         if ($token->results())
         {
