@@ -1,6 +1,5 @@
 {
     "name": "thom855j/php-auth-framework",
-    "version": "dev-master",
     "type": "project",
     "description": "Authentication project for managing users and their permissions ",
     "keywords": ["login", "auth", "user", "authentication", "permissions"],
