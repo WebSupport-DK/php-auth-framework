@@ -1,13 +1,13 @@
 <?php
 
-namespace thom855j\PHPAuthFramework;
+namespace WebSupportDK\PHPAuthFramework;
 
-use thom855j\PHPScrud\DB,
-    thom855j\PHPSecurity\Session,
-    thom855j\PHPSecurity\Cookie,
-    thom855j\PHPSecurity\Hash,
-    thom855j\PHPSecurity\Token,
-    thom855j\PHPSecurity\Password;
+use WebSupportDK\PHPScrud\DB,
+    WebSupportDK\PHPSecurity\Session,
+    WebSupportDK\PHPSecurity\Cookie,
+    WebSupportDK\PHPSecurity\Hash,
+    WebSupportDK\PHPSecurity\Token,
+    WebSupportDK\PHPSecurity\Password;
 
 class Auth
 {
