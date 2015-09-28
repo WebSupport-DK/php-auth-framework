@@ -6,10 +6,10 @@
     "license": "MIT",
     "minimum-stability": "dev",
     "require": {
-        "php": ">=5.4.0",
-        "thom855j/php-security": "dev-master",
-        "thom855j/php-scrud": "dev-master",
-        "thom855j/php-email": "dev-master"
+        "php": ">=5.5.0",
+        "websupport-dk/php-security": "dev-master",
+        "websupport-dk/php-scrud": "dev-master",
+        "websupport-dk/php-email": "dev-master"
     },
     "autoload": {
         "psr-4": {
