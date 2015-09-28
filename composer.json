@@ -1,5 +1,5 @@
 {
-    "name": "thom855j/php-auth-framework",
+    "name": "websupport-dk/php-auth-framework",
     "type": "project",
     "description": "Authentication project for managing users and their permissions ",
     "keywords": ["login", "auth", "user", "authentication", "permissions"],
@@ -13,7 +13,7 @@
     },
     "autoload": {
         "psr-4": {
-            "thom855j\\PHPAuthFramework\\": "src/"
+            "WebSupportDK\\PHPAuthFramework\\": "src/"
         }
     }
 }
