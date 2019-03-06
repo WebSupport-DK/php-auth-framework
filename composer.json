@@ -1,5 +1,5 @@
 {
-    "name": "websupport-dk/php-auth-framework",
+    "name": "datalaere/php-auth-framework",
     "type": "project",
     "description": "Authentication project for managing users and their permissions ",
     "keywords": ["login", "auth", "user", "authentication", "permissions"],
@@ -7,13 +7,13 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=5.5.0",
-        "websupport-dk/php-security": "dev-master",
-        "websupport-dk/php-scrud": "dev-master",
-        "websupport-dk/php-email": "dev-master"
+        "datalaere/php-security": "dev-master",
+        "datalaere/php-scrud": "dev-master",
+        "datalaere/php-email": "dev-master"
     },
     "autoload": {
         "psr-4": {
-            "WebSupportDK\\PHPAuthFramework\\": "src/"
+            "Datalaere\\PHPAuthFramework\\": "src/"
         }
     }
 }

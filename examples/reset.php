@@ -2,8 +2,7 @@
 // load dependencies
 require_once '../vendor/autoload.php';
 
-use thom855j\PHPScrud\DB,
- thom855j\PHPAuthFramework\Auth;
+use Datalaere\PHPScrud\DB, Datalaere\PHPAuthFramework\Auth;
 
 // start db
 DB::load('mysql', 'localhost', 'php-auth-framework', 'root', '');
