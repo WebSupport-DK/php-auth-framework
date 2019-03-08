@@ -1,8 +1,10 @@
 {
     "name": "datalaere/php-auth-framework",
+    "version": "dev-master",
     "type": "project",
-    "description": "Authentication project for managing users and their permissions ",
     "keywords": ["login", "auth", "user", "authentication", "permissions"],
+    "description": "Authentication project for managing users and their permissions ",
+    "homepage": "https://github.com/datalaere/php-auth-framework",
     "license": "MIT",
     "minimum-stability": "dev",
     "require": {
