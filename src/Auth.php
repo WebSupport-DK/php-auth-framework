@@ -2,34 +2,33 @@
 
 namespace Datalaere\PHPAuthFramework;
 
-use Datalaere\PHPScrud\DB,
-    Datalaere\PHPSecurity\Session,
-    Datalaere\PHPSecurity\Cookie,
-    Datalaere\PHPSecurity\Hash,
-    Datalaere\PHPSecurity\Token,
-    Datalaere\PHPSecurity\Password;
+use Datalaere\PHPScrud\DB;
+use Datalaere\PHPSecurity\Session;
+use Datalaere\PHPSecurity\Cookie;
+use Datalaere\PHPSecurity\Hash;
+use Datalaere\PHPSecurity\Token;
+use Datalaere\PHPSecurity\Password;
 
 class Auth
 {
     // object instance
     private static $_instance = null;
 
-    protected
-            $db,
-            $data,
-            $users,
-            $roles,
-            $userAttributes,
-            $status,
-            $token,
-            $active,
-            $sessionName,
-            $sessionRole,
-            $sessions,
-            $cookieName,
-            $cookieExpiry,
-            $timeout,
-            $isLoggedIn;
+    protected $db;
+    protected $data;
+    protected $users;
+    protected $roles;
+    protected $userAttributes;
+    protected $status;
+    protected $token;
+    protected $active;
+    protected $sessionName;
+    protected $sessionRole;
+    protected $sessions;
+    protected $cookieName;
+    protected $cookieExpiry;
+    protected $timeout;
+    protected $isLoggedIn;
 
     public function __construct($db)
     {
@@ -59,16 +58,16 @@ class Auth
         );
 
         // default values
-        $this->active         = 2;
+        $this->active = 2;
 
         // session and cookie names
-        $this->sessionName    = 'User';
-        $this->sessionRole    = 'Role';
-        $this->cookieName     = 'User';
+        $this->sessionName = 'User';
+        $this->sessionRole = 'Role';
+        $this->cookieName = 'User';
 
         // life of cookie before exipry
-        $this->cookieExpiry   = 1800;
-        $this->timeout        = 1800;
+        $this->cookieExpiry = 1800;
+        $this->timeout = 1800;
     }
 
     /*
@@ -91,9 +90,7 @@ class Auth
     //Find users
     public function search($user = null)
     {
-
         if ($user) {
-
             $field = (is_numeric($user)) ? 'ID' : 'Username';
 
             if (filter_var($user, FILTER_VALIDATE_EMAIL)) {
@@ -101,9 +98,9 @@ class Auth
             }
 
             $data = $this->db->select(
-                $this->userAttributes, 
-                $this->users, 
-                null, 
+                $this->userAttributes,
+                $this->users,
+                null,
                 array(array($field, '=', $user))
             );
 
@@ -125,7 +122,6 @@ class Auth
     public function login($usernameOrEmail = null, $password = null, $remember = false)
     {
         if (!$this->isLoggedIn()) {
-
             $user = $this->search($usernameOrEmail);
 
             if ($user) {
@@ -137,10 +133,10 @@ class Auth
                     if ($remember) {
                         $hash = Token::create(46);
                         $hashCheck = $this->db->select(
-                            array('User_ID'), 
-                            $this->sessions, 
-                            null, 
-                            array(array('User_ID', '=', $this->data()->ID)), 
+                            array('User_ID'),
+                            $this->sessions,
+                            null,
+                            array(array('User_ID', '=', $this->data()->ID)),
                             array('LIMIT' => 1)
                         );
 
@@ -163,9 +159,9 @@ class Auth
     private function updateTimeout()
     {
         $this->db->update(
-            $this->users, 
-            'ID', 
-            $this->data()->ID, 
+            $this->users,
+            'ID',
+            $this->data()->ID,
             array('Timeout' => time())
         );
     }
@@ -173,9 +169,9 @@ class Auth
     private function updateLastLogin()
     {
         $this->db->update(
-            $this->users, 
-            'ID', 
-            $this->data()->ID, 
+            $this->users,
+            'ID',
+            $this->data()->ID,
             array('Last_login' => time())
         );
     }
@@ -188,15 +184,15 @@ class Auth
         Session::addKey($this->sessionName, 'Timeout', time());
 
         $role = $this->db->select(
-            array('ID,Role'), 
-            $this->roles, 
-            null, 
+            array('ID,Role'),
+            $this->roles,
+            null,
             array(array('ID', '=', $this->data()->Role_ID))
         );
 
         Session::addKey(
-            $this->sessionName, 
-            'Role', 
+            $this->sessionName,
+            'Role',
             Hash::encrypt($role->first()->Role, $this->token)
         );
 
@@ -216,10 +212,10 @@ class Auth
             // Get hashed name from cookie on client
             // and check if hashed name exists in database 'Sessions'
             $hashCheck = $this->db->select(
-                array('User_ID'), 
-                $this->sessions, 
-                null, 
-                array(array('Token', '=', Cookie::get($this->cookieName))), 
+                array('User_ID'),
+                $this->sessions,
+                null,
+                array(array('Token', '=', Cookie::get($this->cookieName))),
                 array('LIMIT' => 1)
             );
 
@@ -244,7 +240,6 @@ class Auth
     private function checkSession()
     {
         if (Session::exists($this->sessionName)) {
-
             $user_timeout = Session::getKey($this->sessionName, 'Timeout');
 
             if (time() - $user_timeout > $this->timeout) {
@@ -264,7 +259,7 @@ class Auth
 
     public function check()
     {
-        if($this->checkSession() || $this->checkCookie()){
+        if ($this->checkSession() || $this->checkCookie()) {
             return true;
         }
 
@@ -292,9 +287,9 @@ class Auth
         $this->search($user_id);
 
         $this->db->update(
-            $this->users, 
-            'ID', 
-            $this->data()->ID, 
+            $this->users,
+            'ID',
+            $this->data()->ID,
             array('Auth_token' => $token)
         );
 
@@ -304,18 +299,18 @@ class Auth
     public function auth($key)
     {
         $token = $this->db->select(
-            array('ID, Auth_token'), 
-            $this->users, 
-            null, 
+            array('ID, Auth_token'),
+            $this->users,
+            null,
             array(array('Auth_token', '=', $key))
         );
 
         if ($token->results()) {
             $this->search($token->first()->ID);
             $this->db->update(
-                $this->users, 
-                'ID', 
-                $this->data()->ID, 
+                $this->users,
+                'ID',
+                $this->data()->ID,
                 array('Status_ID' => $this->active)
             );
             return true;
@@ -330,9 +325,9 @@ class Auth
         $this->search($user_id);
 
         $this->db->update(
-            $this->users, 
-            'ID', 
-            $user_id, 
+            $this->users,
+            'ID',
+            $user_id,
             array('Reset_token' => $token)
         );
 
@@ -342,9 +337,9 @@ class Auth
     public function reset($key)
     {
         $token = $this->db->select(
-            array('ID, Reset_token'), 
-            $this->users, 
-            null, 
+            array('ID, Reset_token'),
+            $this->users,
+            null,
             array(array('Reset_token', '=', $key))
         );
 
@@ -357,10 +352,9 @@ class Auth
 
     public function logout()
     {
-
         if (Cookie::exists($this->cookieName)) {
             $this->db->delete(
-                $this->sessions, 
+                $this->sessions,
                 array(array('Token', '=', Cookie::get($this->sessionName)))
             );
         }
@@ -379,5 +373,4 @@ class Auth
         $this->check();
         return $this->isLoggedIn;
     }
-
 }
