@@ -1,21 +1,20 @@
 {
-    "name": "datalaere/php-auth-framework",
+    "name": "datalaere/php-auth",
     "version": "dev-master",
     "type": "project",
     "keywords": ["login", "auth", "user", "authentication", "permissions"],
     "description": "Authentication project for managing users and their permissions ",
-    "homepage": "https://github.com/datalaere/php-auth-framework",
+    "homepage": "https://github.com/datalaere/php-auth",
     "license": "MIT",
     "minimum-stability": "dev",
     "require": {
         "php": ">=5.5.0",
         "datalaere/php-security": "dev-master",
-        "datalaere/php-scrud": "dev-master",
-        "datalaere/php-email": "dev-master"
+        "datalaere/php-crud": "dev-master"
     },
     "autoload": {
         "psr-4": {
-            "Datalaere\\PHPAuthFramework\\": "src/"
+            "PHP\\Auth\\": "src/"
         }
     }
 }
