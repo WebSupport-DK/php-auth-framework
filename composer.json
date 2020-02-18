@@ -8,9 +8,10 @@
     "license": "MIT",
     "minimum-stability": "dev",
     "require": {
-        "php": ">=5.5.0",
+        "php": ">=7.0",
         "datalaere/php-security": "dev-master",
-        "datalaere/php-crud": "dev-master"
+        "datalaere/php-crud": "dev-master",
+        "datalaere/php-http": "dev-master"
     },
     "autoload": {
         "psr-4": {
