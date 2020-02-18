@@ -1,12 +1,11 @@
 {
     "name": "datalaere/php-auth",
     "version": "dev-master",
-    "type": "project",
+    "type": "library",
     "keywords": ["login", "auth", "user", "authentication", "permissions"],
     "description": "Authentication project for managing users and their permissions ",
     "homepage": "https://github.com/datalaere/php-auth",
     "license": "MIT",
-    "minimum-stability": "dev",
     "require": {
         "php": ">=7.0",
         "datalaere/php-security": "dev-master",
