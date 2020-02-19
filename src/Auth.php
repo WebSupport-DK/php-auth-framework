@@ -13,7 +13,8 @@ use PHP\Security\Hash;
 
 class Auth 
 {
-    private $instance;
+    protected static $instance = null;
+    
     protected $user;
     protected $role;
     protected $session;
@@ -59,6 +60,8 @@ class Auth
                 return $this->login();
             }
         }
+
+        return false;
     }
 
     public function attempt() 
