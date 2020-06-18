@@ -2,32 +2,26 @@
 
 namespace PHP\Auth;
 
-use PHP\Auth\Models\UserModel as Users;
-use PHP\Auth\Models\RoleModel as Roles;
-use PHP\Auth\Models\SessionModel as Sessions;
+use PHP\Auth\User;
 
 use PHP\HTTP\Session;
 use PHP\HTTP\Cookie;
 
 use PHP\Security\Hash;
+use PHP\Security\Password;
 
 class Auth 
 {
     protected static $instance = null;
     
     protected $user;
-    protected $role;
-    protected $session;
     protected $sessionName = 'user';
     protected $cookieName = 'hash';
     protected $cookieExpiry = 604800;
 
     public function __construct()
     {
-        $this->user = new Users();
-        $this->role = new Roles();
-        $this->session = new Sessions();
-        
+        $this->user = new User();
     }
 
     public static function singleton()
@@ -41,7 +35,7 @@ class Auth
 
     public function user() 
     {
-        return $this->user->find($_SESSION[$this->sessionName]);
+        return $this->user->find(Session::get($this->sessionName));
     }
 
     public function check() 
@@ -53,10 +47,10 @@ class Auth
 
         if (!Session::exists($this->sessionName) && Cookie::exists($this->cookieName)) {
             $hash = Cookie::get($this->cookieName);
-            $hashCheck = $this->session->getHash($hash);
+            $user = $this->user->getSession($hash);
         
-            if ($hashCheck->count()) {
-                $this->data = $hashCheck->first()->user_id;
+            if ($user) {
+                $this->data = $user->getId();
                 return $this->login();
             }
         }
@@ -77,21 +71,20 @@ class Auth
     public function login($username = null, $password = null, $remember = false) {
 
         if (!$username && !$password && $this->user->exists()) {
-            Session::set($this->sessionName, $this->user->data()->id);
+            Session::set($this->sessionName, $this->user->getId());
         } else {
             if ($this->user->find($username)) {
-                if (password_verify($password, $this->user->data()->password)) {
+                if (Password::verify($password, $this->user->getPassword())) {
 
-                    Session::set($this->sessionName, $this->user->data()->id);
+                    Session::set($this->sessionName, $this->user->getId());
 
                     if ($remember) {
                         $hash = Hash::unique();
-                        $hashCheck = $this->session->getUser($this->user->data()->id);
 
-                        if (!$hashCheck->count()) {
-                            $this->session->set($hash);
+                        if(!$this->user->getSession()) {
+                            $hash = $this->user->setSession($hash);
                         } else {
-                            $hashCheck = $hashCheck->first()->hash;
+                            $hash = $this->user->getSession();
                         }
 
                         Cookie::set($this->cookieName, $hash, $this->cookieExpiry);
@@ -105,9 +98,22 @@ class Auth
         return false;
     }
 
+    public function role($key)
+    {
+        $role = json_decode($this->user->getRole(), true);
+        
+        if($role[$key] == true) {
+            return true;
+        }
+
+        return false;
+    }
+
     public function logout()
     {
-        $this->session->destroy($this->user->data()->id);
+        $this->session->destroy($this->user->getUserId());
+
+        $this->user->resetSession();
 
         Session::delete($this->sessionName);
         Cookie::delete($this->cookieName);

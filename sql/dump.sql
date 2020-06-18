@@ -1,14 +1,15 @@
-@@ -1,110 +0,0 @@
 -- phpMyAdmin SQL Dump
--- version 4.4.14
--- http://www.phpmyadmin.net
+-- version 5.0.1
+-- https://www.phpmyadmin.net/
 --
--- Vært: localhost
--- Genereringstid: 14. 09 2015 kl. 18:56:45
--- Serverversion: 5.6.26
--- PHP-version: 5.6.12
+-- Vært: 127.0.0.1
+-- Genereringstid: 18. 06 2020 kl. 16:20:47
+-- Serverversion: 10.4.11-MariaDB
+-- PHP-version: 7.4.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -18,42 +19,8 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `php-mvc-cmf`
+-- Database: `php-cms`
 --
-
--- --------------------------------------------------------
-
---
--- Struktur-dump for tabellen `Roles`
---
-
-CREATE TABLE IF NOT EXISTS `roles` (
-  `id` int(11) NOT NULL,
-  `name` varchar(20) NOT NULL,
-  `role` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Data dump for tabellen `Roles`
---
-
-INSERT INTO `roles` (`id`, `name`, `role`) VALUES
-(1, 'admin', '{"admin": 1,"editor": 1,"author": 1,"subscriber": 1}'),
-(2, 'editor', '{"admin": 0,"editor": 1,"author": 1,"subscriber": 1}'),
-(3, 'author', '{"admin": 0,"editor": 0,"author": 1,"subscriber": 1}'),
-(4, 'subscriber', '{"admin": 0,"editor": 0,"author": 0,"subscriber": 1}');
-
--- --------------------------------------------------------
-
---
--- Struktur-dump for tabellen `sessions`
---
-
-CREATE TABLE IF NOT EXISTS `sessions` (
-  `id` int(11) NOT NULL,
-  `token` varchar(64) NOT NULL,
-  `user_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -61,15 +28,38 @@ CREATE TABLE IF NOT EXISTS `sessions` (
 -- Struktur-dump for tabellen `users`
 --
 
-CREATE TABLE IF NOT EXISTS `users` (
-  `id` bigint(11) NOT NULL,
-  `username` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `firstname` varchar(255) NOT NULL,
-  `lastname` varchar(255) NOT NULL,
-  `role_id` int(11) NOT NULL,
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL,
+  `username` varchar(20) NOT NULL,
+  `password` varchar(64) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `created` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated` timestamp NULL DEFAULT NULL,
+  `session` varchar(64) NOT NULL,
+  `token` varchar(64) NOT NULL,
+  `role` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Begrænsninger for dumpede tabeller
+--
+
+--
+-- Indeks for tabel `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Brug ikke AUTO_INCREMENT for slettede tabeller
+--
+
+--
+-- Tilføj AUTO_INCREMENT i tabel `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
